@@ -1,0 +1,54 @@
+{
+  "Flowers": [
+    {
+      "Name": "Roses",
+      "Code": "R12",
+      "Bundles": [
+        {
+          "Size": 5,
+          "Cost": 6.99
+        },
+        {
+          "Size": 10,
+          "Cost": 12.99
+        }
+      ] 
+    },
+    {
+      "Name": "Lilies",
+      "Code": "L09",
+      "Bundles": [
+        {
+          "Size": 3,
+          "Cost": 6.99
+        },
+        {
+          "Size": 6,
+          "Cost": 16.95
+        },
+        {
+          "Size": 9,
+          "Cost": 24.95
+        }
+      ]
+    },
+    {
+      "Name": "Tulips",
+      "Code": "T58",
+      "Bundles": [
+        {
+          "Size": 3,
+          "Cost": 5.95
+        },
+        {
+          "Size": 5,
+          "Cost": 9.95
+        },
+        {
+          "Size": 9,
+          "Cost": 16.99
+        }
+      ]
+    }
+  ] 
+}
