@@ -54,6 +54,6 @@ namespace CliFlowerShop.DomainModel
         }
 
         private bool ValidBundleHasNotBeenFound(FlowerBundles flowerBundles, int retryCount)
-            => flowerBundles == null && retryCount < _orderedCountAndCost.Count;
+            => flowerBundles == default(FlowerBundles) && retryCount < _orderedCountAndCost.Count;
     }
 }

@@ -10,6 +10,7 @@ namespace CliFlowerShop.DomainModel
     {
         private const string OrderCountGroup = "OrderCount";
         private const string FlowerCodeGroup = "FlowerCode";
+        private const string OrderRegexPattern = @"^(?<OrderCount>\d+)\s+(?<FlowerCode>(\w|\d)+)$";
 
         private readonly Regex _orderFormat;
         private readonly StockConfiguration _stock;
@@ -18,7 +19,7 @@ namespace CliFlowerShop.DomainModel
         public FlowerOrders(StockConfiguration stock)
         {
             _stock = stock;
-            _orderFormat = new Regex(@"^(?<OrderCount>\d+)\s+(?<FlowerCode>(\w|\d)+)$");
+            _orderFormat = new Regex(OrderRegexPattern);
             _orders = new List<(int flowerCount, string flowerCode)>();
         }
 
@@ -28,14 +29,27 @@ namespace CliFlowerShop.DomainModel
         public void AddOrder(string userInput)
         {
             userInput = userInput.Trim(' ');
-            
             var match = _orderFormat.Match(userInput);
-            if (!match.Success)
-                throw new InvalidOrderFormatException();
+            
+            AssertValidOrderFormat(match);
 
             var flowerCount = int.Parse(match.Groups[OrderCountGroup].Value);
             var flowerCode = match.Groups[FlowerCodeGroup].Value;
 
+            AssertFlowerCodeAndFlowerCountIsValid(flowerCode, flowerCount);
+            AddOrderInternal(flowerCount, flowerCode);
+        }
+
+        private void AssertValidOrderFormat(Match match)
+        {
+            if (!match.Success)
+                throw new InvalidOrderFormatException();
+        }
+        
+        private void AssertFlowerCodeAndFlowerCountIsValid(
+            string flowerCode, 
+            int flowerCount)
+        {
             if (!IsValidFlowerCode(flowerCode))
                 throw new InvalidFlowerCodeException();
 
@@ -44,8 +58,6 @@ namespace CliFlowerShop.DomainModel
 
             if (FlowerCodeAlreadyExists(flowerCode))
                 throw new OrderAlreadyExistsException();
-
-            AddOrderInternal(flowerCount, flowerCode);
         }
         
         private bool IsValidFlowerCode(string flowerCode)

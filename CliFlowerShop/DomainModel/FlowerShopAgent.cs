@@ -56,6 +56,13 @@ namespace CliFlowerShop.DomainModel
                 PrintOrderAlreadyExistsError();
             }
         }
+        
+        private void SubmitOrderAndPrintReceipt(IOrders orders)
+        {
+            Console.WriteLine("Your Receipt:");
+            Console.WriteLine(_shop.SubmitOrder(orders).ToString());
+            Console.ReadLine();
+        }
 
         private void PrintWelcomeBanner()
             => Console.WriteLine("Welcome to CLI Flower Shop!\n" +
@@ -84,13 +91,6 @@ namespace CliFlowerShop.DomainModel
 
         private static void PrintOrderAlreadyExistsError()
             => Console.WriteLine("Order already exists!");
-
-        private void SubmitOrderAndPrintReceipt(IOrders orders)
-        {
-            Console.WriteLine("Your Receipt:");
-            Console.WriteLine(_shop.SubmitOrder(orders).ToString());
-            Console.ReadLine();
-        }
 
         private string GetFormattedValidFlowers()
             => string.Join("\n", _stockConfiguration.Flowers.Select(f => $"\t{f.Code}: {f.Name}"));
