@@ -22,4 +22,18 @@ Given a customer order you are required to determine the cost and bundle breakdo
 each product. To save on shipping space each order should contain the minimal number
 of bundles.
 
+## Pre-requisites
+1. .Net 5.0 SDK needs to be installed
+1.1 Confirm that you have it installed by running: `dotnet --version`, you should see: `5.0.XXX`
+
+## Running the tests
+1. From root directory run `dotnet test`
+
 ## Running the solution
+1. Run via dotnet command directly
+1.1 From root directory, navigate to the `CliFlowerShop` directory
+1.2 run: `dotnet run`
+2. Publish and run via executable
+2.1 run: `dotnet publish -c Release`
+2.2 navigate to: `.\CliFlowerShop\bin\Release\net5.0`
+2.3 execute CliFlowerShop.exe
