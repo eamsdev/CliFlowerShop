@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CliFlowerShop.Configuration;
 using CliFlowerShop.DomainExceptions;
 
@@ -7,68 +8,94 @@ namespace CliFlowerShop.DomainModel
     public class FlowerShopAgent
     {
         private readonly FlowerShop _shop;
+        private readonly StockConfiguration _stockConfiguration;
 
         public FlowerShopAgent()
         {
-            var stock = ConfigurationLoader<StockConfiguration>.Load("Configuration/stock.json");
-            _shop = new FlowerShop(stock);
+            _stockConfiguration = ConfigurationLoader<StockConfiguration>.Load("stock.json");
+            _shop = new FlowerShop(_stockConfiguration);
         }
 
-        public void Run()
+        public void BuyFlowers()
         {
+            PrintWelcomeBanner();
+            
             var newOrders = _shop.NewOrders();
-
-            Console.WriteLine("Welcome to CLI Flower Shop!\n" +
-                              "The following flowers are available:\n" +
-                              "\t1. R12: Roses\n" +
-                              "\t2. L09: Lilies\n" +
-                              "\t3. T58: Tulips\n" +
-                              "You can add order in the following format:\n" +
-                              "\t[COUNT] [FLOWER CODE]\n" +
-                              "For Example:\n" +
-                              "\t\"10 R12\"\n" +
-                              "\twill order 10 Roses!\n" +
-                              "Leave your input empty to submit your order!\n" +
-                              "Place your order below!:\n");
-
             while (true)
             {
                 var input = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(input))
                     break;
-
-                try
-                {
-                    newOrders.AddOrder(input);
-                }
-                catch (InvalidFlowerCodeException)
-                {
-                    Console.WriteLine("Flower code is Invalid! Valid flower codes are:\n" +
-                                      "\t1. R12: Roses\n" +
-                                      "\t2. L09: Lilies\n" +
-                                      "\t3. T58: Tulips");
-                }
-                catch (InvalidOrderFormatException)
-                {
-                    Console.WriteLine("Order format is Invalid! Valid format is:\n" +
-                                      "\t[POSITIVE_NUMBER] [FLOWER CODE]\n" +
-                                      "For Example:\n" +
-                                      "\t\"10 R12\"");
-                }
-                catch (InvalidFlowerCountException)
-                {
-                    Console.WriteLine("Order count must be greater than zero!");
-                }
-                catch (OrderAlreadyExistsException)
-                {
-                    Console.WriteLine("Order already exists!");
-                }
-
+                
+                AddOrderInternal(newOrders, input);
             }
 
+            SubmitOrderAndPrintReceipt(newOrders);
+        }
+
+        private void AddOrderInternal(FlowerOrders orders, string newOrder)
+        {
+            try
+            {
+                orders.AddOrder(newOrder);
+            }
+            catch (InvalidFlowerCodeException)
+            {
+                PrintFlowerCodeError();
+            }
+            catch (InvalidOrderFormatException)
+            {
+                PrintInvalidFormatError();
+            }
+            catch (InvalidFlowerCountException)
+            {
+                PrintFlowerCountError();
+            }
+            catch (OrderAlreadyExistsException)
+            {
+                PrintOrderAlreadyExistsError();
+            }
+        }
+
+        private void PrintWelcomeBanner()
+            => Console.WriteLine("Welcome to CLI Flower Shop!\n" +
+                              "The following flowers are available:\n" +
+                              $"{GetFormattedValidFlowers()}\n" +
+                              "You can add order in the following format:\n" +
+                              "\t[COUNT] [FLOWER CODE]\n" +
+                              "For Example:\n" +
+                              "\t\"10 R12\"\n" +
+                              "Leave your input empty to submit your order!\n" +
+                              "Place your order below!:\n");
+        
+
+        private void PrintFlowerCodeError()
+            => Console.WriteLine("Flower code is Invalid! Valid flower codes are:\n" +
+                                 $"{GetFormattedValidFlowers()}");
+
+        private void PrintInvalidFormatError()
+            => Console.WriteLine("Order format is Invalid! Valid format is:\n" +
+                                 "\t[POSITIVE_NUMBER] [FLOWER CODE]\n" +
+                                 "For Example:\n" +
+                                 $"\t{GetFormattedOrderExample()}");
+        
+        private static void PrintFlowerCountError()
+            => Console.WriteLine("Order count must be greater than zero!");
+
+        private static void PrintOrderAlreadyExistsError()
+            => Console.WriteLine("Order already exists!");
+
+        private void SubmitOrderAndPrintReceipt(IOrders orders)
+        {
             Console.WriteLine("Your Receipt:");
-            Console.WriteLine(_shop.SubmitOrder(newOrders).ToString());
+            Console.WriteLine(_shop.SubmitOrder(orders).ToString());
             Console.ReadLine();
         }
+
+        private string GetFormattedValidFlowers()
+            => string.Join("\n", _stockConfiguration.Flowers.Select(f => $"\t{f.Code}: {f.Name}"));
+        
+        private string GetFormattedOrderExample()
+            => _stockConfiguration.Flowers.Select(f => $"10 {f.Code}").Single();
     }
 }

@@ -92,8 +92,7 @@ namespace CliFlowerShop.Test
             // Then: Expected items is found
             Assert.Contains(
                 order.Orders, 
-                o => o.flowerCode == "L09" 
-                     && o.flowerCount == 10);
+                o => o.flowerCode == "L09" && o.flowerCount == 10);
         }
 
         [Fact]
@@ -112,6 +111,7 @@ namespace CliFlowerShop.Test
                 order.Orders,
                 o => o.flowerCode == "L09" 
                      && o.flowerCount == 9);
+            
             Assert.Contains(
                 order.Orders,
                 o => o.flowerCode == "R12"

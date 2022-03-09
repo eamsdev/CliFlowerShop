@@ -20,18 +20,15 @@ namespace CliFlowerShop.DomainModel
 
         public FlowerBundles GetValidBundles(int orderedCount)
         {
+            var retryCount = 0;
             if (orderedCount == 0)
                 throw new InvalidFlowerCountException();
 
-            var retryCount = 0;
             FlowerBundles flowerBundles = null;
-            while (flowerBundles == null && retryCount < _orderedCountAndCost.Count)
-            {
-                flowerBundles = TryGetValidBundleWithBundleOffset(orderedCount, retryCount);
-                retryCount += 1;
-            }
+            while (ValidBundleHasNotBeenFound(flowerBundles, retryCount))
+                flowerBundles = TryGetValidBundleWithBundleOffset(orderedCount, retryCount++);
 
-            if (flowerBundles == null)
+            if (flowerBundles == default(FlowerBundles))
                 throw new InvalidFlowerCountException();
 
             return flowerBundles;
@@ -55,5 +52,8 @@ namespace CliFlowerShop.DomainModel
 
             return orderedCount != 0 ? null : validBundle;
         }
+
+        private bool ValidBundleHasNotBeenFound(FlowerBundles flowerBundles, int retryCount)
+            => flowerBundles == null && retryCount < _orderedCountAndCost.Count;
     }
 }

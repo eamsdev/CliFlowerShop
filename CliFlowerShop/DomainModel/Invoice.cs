@@ -23,13 +23,15 @@ namespace CliFlowerShop.DomainModel
         
         private static string IndividualInvoice(IFlowersBundle bundles)
         {
-            var individualBundlePrintOut = new StringBuilder();
             var totalFlowers = 0;
             var totalCost = (decimal) 0;
+            var individualBundlePrintOut = new StringBuilder();
+            
             foreach (var (bundleCount, bundle) in bundles.OrderedBundles)
             {
                 totalFlowers += bundleCount * bundle.Size;
                 totalCost += bundleCount * bundle.Cost;
+                
                 individualBundlePrintOut.AppendLine(
                     $"\t{bundleCount} x {bundle.Size} ${bundle.Cost}");
             }
@@ -41,11 +43,10 @@ namespace CliFlowerShop.DomainModel
         private string SpecialNote()
         {
             if (!_invalidOrders.Any())
-                return null;
-
-            var joinedInvalidOrders = string.Join(", ", _invalidOrders);
-            return $"\nThe following orders contain invalid flower counts: " +
-                   $"{joinedInvalidOrders}";
+                return string.Empty;
+            
+            return "\nThe following orders contain invalid flower counts: " +
+                   $"{string.Join(", ", _invalidOrders)}";
         }
     }
 }

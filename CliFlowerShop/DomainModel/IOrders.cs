@@ -4,6 +4,6 @@ namespace CliFlowerShop.DomainModel
 {
     public interface IOrders
     {
-        public List<(int flowerCount, string flowerCode)> Orders { get; }
+        public IEnumerable<(int flowerCount, string flowerCode)> Orders { get; }
     }
 }

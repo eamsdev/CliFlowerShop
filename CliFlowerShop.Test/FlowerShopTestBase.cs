@@ -7,7 +7,7 @@ namespace CliFlowerShop.Test
         protected readonly StockConfiguration Stock;
         public FlowerShopTestBase()
         {
-            Stock = ConfigurationLoader<StockConfiguration>.Load("Configuration/stock.json");
+            Stock = ConfigurationLoader<StockConfiguration>.Load("stock.json");
         }
     }
 }

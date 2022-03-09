@@ -25,15 +25,15 @@ namespace CliFlowerShop.DomainModel
             => _addedBundleSize
                 .GroupBy(Size)
                 .Select(CountAndBundleTuple);
+        
+        private decimal GetCostByBundleSize(int bundleSize)
+            => _flowerConfig.Bundles.First(bundle => bundle.Size == bundleSize).Cost;
 
         // Syntactic Sugaring
-        private static int Size(int i) => i;
+        private static int Size(int size) => size;
         
         // Syntactic Sugaring
         private (int, Bundle) CountAndBundleTuple(IGrouping<int, int> grouping)
             => (grouping.Count(), new Bundle(grouping.Key, GetCostByBundleSize(grouping.Key)));
-
-        private decimal GetCostByBundleSize(int bundleSize)
-            => _flowerConfig.Bundles.First(bundle => bundle.Size == bundleSize).Cost;
     }
 }

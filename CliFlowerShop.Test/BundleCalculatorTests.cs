@@ -41,7 +41,7 @@ namespace CliFlowerShop.Test
         }
 
         [Fact]
-        public void RetrieveFlowerBundlesForFlowersLeftover()
+        public void RetrieveFlowerBundlesNotDivisible()
         {
             // Given: The Bundle Calculator
             var bundleCalculator = new BundlesCalculator(_tulipsConfig);

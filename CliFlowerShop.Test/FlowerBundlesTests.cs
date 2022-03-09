@@ -36,10 +36,11 @@ namespace CliFlowerShop.Test
 
             // Then: There are 2 bundles of size 3
             Assert.Single(bundle.OrderedBundles);
+            
             Assert.Equal("L09", bundle.Code);
             Assert.Equal(2, bundle.OrderedBundles.Single().bundleCount);
-            Assert.Equal((decimal) 6.99, bundle.OrderedBundles.Single().bundle.Cost);
             Assert.Equal(3, bundle.OrderedBundles.Single().bundle.Size);
+            Assert.Equal((decimal)6.99, bundle.OrderedBundles.Single().bundle.Cost);
         }
 
         [Fact]
@@ -57,12 +58,12 @@ namespace CliFlowerShop.Test
             Assert.Equal("L09", bundle.Code);
             
             Assert.Equal(1, bundle.OrderedBundles.ToList()[0].bundleCount);
-            Assert.Equal((decimal)6.99, bundle.OrderedBundles.ToList()[0].bundle.Cost);
             Assert.Equal(3, bundle.OrderedBundles.ToList()[0].bundle.Size);
+            Assert.Equal((decimal)6.99, bundle.OrderedBundles.ToList()[0].bundle.Cost);
 
             Assert.Equal(1, bundle.OrderedBundles.ToList()[1].bundleCount);
-            Assert.Equal((decimal)16.95, bundle.OrderedBundles.ToList()[1].bundle.Cost);
             Assert.Equal(6, bundle.OrderedBundles.ToList()[1].bundle.Size);
+            Assert.Equal((decimal)16.95, bundle.OrderedBundles.ToList()[1].bundle.Cost);
         }
     }
 }

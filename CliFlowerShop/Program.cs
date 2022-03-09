@@ -6,7 +6,7 @@ namespace CliFlowerShop
     {
         private static void Main(string[] args)
         {
-            new FlowerShopAgent().Run();
+            new FlowerShopAgent().BuyFlowers();
         }
     }
 }

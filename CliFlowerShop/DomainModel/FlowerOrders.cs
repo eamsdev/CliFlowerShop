@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using CliFlowerShop.Configuration;
 using CliFlowerShop.DomainExceptions;
-using Microsoft.VisualBasic;
 
 namespace CliFlowerShop.DomainModel
 {
@@ -15,19 +13,21 @@ namespace CliFlowerShop.DomainModel
 
         private readonly Regex _orderFormat;
         private readonly StockConfiguration _stock;
+        private readonly List<(int flowerCount, string flowerCode)> _orders;
 
         public FlowerOrders(StockConfiguration stock)
         {
             _stock = stock;
-            _orderFormat = new Regex(@"(?<OrderCount>\d+)\s+(?<FlowerCode>(\w|\d)+)$");
-            Orders = new List<(int flowerCount, string flowerCode)>();
+            _orderFormat = new Regex(@"^(?<OrderCount>\d+)\s+(?<FlowerCode>(\w|\d)+)$");
+            _orders = new List<(int flowerCount, string flowerCode)>();
         }
-        
-        public List<(int flowerCount, string flowerCode)> Orders { get; }
+
+        public IEnumerable<(int flowerCount, string flowerCode)> Orders 
+            => _orders;
 
         public void AddOrder(string userInput)
         {
-            userInput = Strings.Trim(userInput);
+            userInput = userInput.Trim(' ');
             
             var match = _orderFormat.Match(userInput);
             if (!match.Success)
@@ -42,7 +42,7 @@ namespace CliFlowerShop.DomainModel
             if (flowerCount == 0)
                 throw new InvalidFlowerCountException();
 
-            if (Orders.Exists(o => o.flowerCode == flowerCode))
+            if (FlowerCodeAlreadyExists(flowerCode))
                 throw new OrderAlreadyExistsException();
 
             AddOrderInternal(flowerCount, flowerCode);
@@ -56,6 +56,9 @@ namespace CliFlowerShop.DomainModel
                     StringComparison.Ordinal) == 0);
 
         private void AddOrderInternal(int count, string code) 
-            => Orders.Add((count, code));
+            => _orders.Add((count, code));
+
+        private bool FlowerCodeAlreadyExists(string flowerCode)
+            => _orders.Exists(o => o.flowerCode == flowerCode);
     }
 }
