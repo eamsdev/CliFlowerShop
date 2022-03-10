@@ -1,4 +1,5 @@
-﻿using CliFlowerShop.DomainModel;
+﻿using System;
+using CliFlowerShop.DomainModel;
 
 namespace CliFlowerShop
 {
@@ -7,6 +8,7 @@ namespace CliFlowerShop
         private static void Main(string[] args)
         {
             new FlowerShopAgent().BuyFlowers();
+            Console.ReadLine();
         }
     }
 }

@@ -61,7 +61,6 @@ namespace CliFlowerShop.DomainModel
         {
             Console.WriteLine("Your Receipt:");
             Console.WriteLine(_shop.SubmitOrder(orders).ToString());
-            Console.ReadLine();
         }
 
         private void PrintWelcomeBanner()
@@ -78,24 +77,24 @@ namespace CliFlowerShop.DomainModel
 
         private void PrintFlowerCodeError()
             => Console.WriteLine("Flower code is Invalid! Valid flower codes are:\n" +
-                                 $"{GetFormattedValidFlowers()}");
+                                 $"{GetFormattedValidFlowers()}\n");
 
         private void PrintInvalidFormatError()
             => Console.WriteLine("Order format is Invalid! Valid format is:\n" +
                                  "\t[POSITIVE_NUMBER] [FLOWER CODE]\n" +
                                  "For Example:\n" +
-                                 $"\t{GetFormattedOrderExample()}");
+                                 $"\t{GetFormattedOrderExample()}\n");
         
         private static void PrintFlowerCountError()
-            => Console.WriteLine("Order count must be greater than zero!");
+            => Console.WriteLine("Order count must be greater than zero!\n");
 
         private static void PrintOrderAlreadyExistsError()
-            => Console.WriteLine("Order already exists!");
+            => Console.WriteLine("Order already exists!\n");
 
         private string GetFormattedValidFlowers()
             => string.Join("\n", _stockConfiguration.Flowers.Select(f => $"\t{f.Code}: {f.Name}"));
         
         private string GetFormattedOrderExample()
-            => _stockConfiguration.Flowers.Select(f => $"10 {f.Code}").Single();
+            => _stockConfiguration.Flowers.Select(f => $"10 {f.Code}").First();
     }
 }

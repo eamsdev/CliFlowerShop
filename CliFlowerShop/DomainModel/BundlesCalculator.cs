@@ -26,9 +26,11 @@ namespace CliFlowerShop.DomainModel
 
             FlowerBundles flowerBundles = null;
             while (ValidBundleHasNotBeenFound(flowerBundles, retryCount))
+            {
                 flowerBundles = TryGetValidBundleWithBundleOffset(orderedCount, retryCount++);
+            }
 
-            if (flowerBundles == default(FlowerBundles))
+            if (flowerBundles == null)
                 throw new InvalidFlowerCountException();
 
             return flowerBundles;
@@ -54,6 +56,6 @@ namespace CliFlowerShop.DomainModel
         }
 
         private bool ValidBundleHasNotBeenFound(FlowerBundles flowerBundles, int retryCount)
-            => flowerBundles == default(FlowerBundles) && retryCount < _orderedCountAndCost.Count;
+            => flowerBundles == null && retryCount < _orderedCountAndCost.Count;
     }
 }

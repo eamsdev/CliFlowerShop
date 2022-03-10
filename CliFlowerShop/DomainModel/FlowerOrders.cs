@@ -40,7 +40,7 @@ namespace CliFlowerShop.DomainModel
             AddOrderInternal(flowerCount, flowerCode);
         }
 
-        private void AssertValidOrderFormat(Match match)
+        private static void AssertValidOrderFormat(Match match)
         {
             if (!match.Success)
                 throw new InvalidOrderFormatException();
